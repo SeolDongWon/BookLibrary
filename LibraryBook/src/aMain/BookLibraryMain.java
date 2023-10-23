@@ -1,7 +1,7 @@
 package aMain;
 
-import view.MENU_BOOKINFO;
-import view.MENU_BOOKLOAN;
+import view.MENU_BOOK;
+import view.MENU_LIBRARY;
 import view.MENU_MAIN;
 import view.MENU_MEMBER;
 import view.MenuViewer;
@@ -88,23 +88,23 @@ public class BookLibraryMain {
 		selectMenu = MenuViewer.scan.nextInt(); // 도서 관리 메뉴 출력
 		MenuViewer.scan.nextLine(); // 도서 메뉴 입력
 		switch (selectMenu) {
-		case MENU_BOOKINFO.LIST: // MENU_BOOKINFO의 상수 정수 1
+		case MENU_BOOK.LIST: // MENU_BOOKINFO의 상수 정수 1
 			System.out.println("");
 			// 도서 목록
 			break;
-		case MENU_BOOKINFO.INSERT: // MENU_BOOKINFO의 상수 정수 2
+		case MENU_BOOK.INSERT: // MENU_BOOKINFO의 상수 정수 2
 			System.out.println("");
 			// 도서 등록
 			break;
-		case MENU_BOOKINFO.UPDATE: // MENU_BOOKINFO의 상수 정수 3
+		case MENU_BOOK.UPDATE: // MENU_BOOKINFO의 상수 정수 3
 			System.out.println("");
 			// 도서 수정
 			break;
-		case MENU_BOOKINFO.DELETE: // MENU_BOOKINFO의 상수 정수 4
+		case MENU_BOOK.DELETE: // MENU_BOOKINFO의 상수 정수 4
 			System.out.println("");
 			// 도서 삭제
 			break;
-		case MENU_BOOKINFO.MAIN: // MENU_BOOKINFO의 상수 정수 5
+		case MENU_BOOK.MAIN: // MENU_BOOKINFO의 상수 정수 5
 			return; // 나가기
 		default:
 			System.out.println("해당 메뉴 번호만 입력하세요.");
@@ -119,27 +119,27 @@ public class BookLibraryMain {
 		choice = MenuViewer.scan.nextInt(); // 도서관 이용메뉴 메뉴 입력
 		MenuViewer.scan.nextLine();
 		switch (choice) {
-		case MENU_BOOKLOAN.LIST: // MENU_BOOKLOAN의 상수 정수 1
+		case MENU_LIBRARY.LIST: // MENU_BOOKLOAN의 상수 정수 1
 			System.out.println("");
 			// 도서 검색
 			break;
-		case MENU_BOOKLOAN.LOAN: // MENU_BOOKLOAN의 상수 정수 2
+		case MENU_LIBRARY.LOAN: // MENU_BOOKLOAN의 상수 정수 2
 			System.out.println("");
 			// 도서 대출
 			break;
-		case MENU_BOOKLOAN.RESERVATION: // MENU_BOOKLOAN의 상수 정수 3
+		case MENU_LIBRARY.RESERVATION: // MENU_BOOKLOAN의 상수 정수 3
 			System.out.println("");
 			// 대출 예약
 			break;
-		case MENU_BOOKLOAN.RETURN: // MENU_BOOKLOAN의 상수 정수 4
+		case MENU_LIBRARY.RETURN: // MENU_BOOKLOAN의 상수 정수 4
 			System.out.println("");
 			// 도서 반납
 			break;
-		case MENU_BOOKLOAN.POSTPONE: // MENU_BOOKLOAN의 상수 정수 5
+		case MENU_LIBRARY.POSTPONE: // MENU_BOOKLOAN의 상수 정수 5
 			System.out.println("");
 			// 반납 연기
 			break;
-		case MENU_BOOKLOAN.MAIN: // MENU_BOOKLOAN의 상수 정수 6
+		case MENU_LIBRARY.MAIN: // MENU_BOOKLOAN의 상수 정수 6
 			return;
 		default:
 			System.out.println("해당 메뉴 번호만 입력하세요.");

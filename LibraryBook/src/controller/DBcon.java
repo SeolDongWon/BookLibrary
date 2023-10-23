@@ -8,7 +8,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class DBConnecter {
+public class DBcon {
 	public static Connection getConnection() {
 		Properties properties = new Properties();
 		Connection connection = null;

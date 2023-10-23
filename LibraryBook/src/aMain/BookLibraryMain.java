@@ -1,5 +1,6 @@
 package aMain;
 
+import controller.MemberRegisterManager;
 import view.MENU_BOOK;
 import view.MENU_LIBRARY;
 import view.MENU_MAIN;
@@ -50,28 +51,29 @@ public class BookLibraryMain {
 	}
 
 	private static void memberMenu() { // 회원 관리 메뉴
-		// 회원 객체를 만들 자리
+		MemberRegisterManager mrm = new MemberRegisterManager();// 회원 객체를 만들 자리
 		int selectMenu = 0;
 		// 회원 CRUD 컨트롤러
 		MenuViewer.memberMenuView(); // 회원 관리 메뉴 출력
 		selectMenu = MenuViewer.scan.nextInt(); // 회원 메뉴 입력
 		MenuViewer.scan.nextLine();
 		switch (selectMenu) {
-		case MENU_MEMBER.LIST: // MENU_MEMBER의 상수 정수 1
+		case MENU_MEMBER.LIST: // MENU_MEMBER의 상수 정수 1 // 회원 목록
+			mrm.memberTotalList();
 			System.out.println("");
-			// 회원 목록
 			break;
-		case MENU_MEMBER.INSERT: // MENU_MEMBER의 상수 정수 2
+		case MENU_MEMBER.INSERT: // MENU_MEMBER의 상수 정수 2 // 회원 등록
+			mrm.memberRegistr();
 			System.out.println("");
-			// 회원 등록
 			break;
-		case MENU_MEMBER.UPDATE: // MENU_MEMBER의 상수 정수 3
+		case MENU_MEMBER.UPDATE: // MENU_MEMBER의 상수 정수 3 // 회원 수정
 			System.out.println("");
-			// 회원 수정
+			mrm.memberUpdate();
 			break;
-		case MENU_MEMBER.DELETE: // MENU_MEMBER의 상수 정수 4
+		case MENU_MEMBER.DELETE: // MENU_MEMBER의 상수 정수 4 // 회원 삭제
+			mrm.memberDelete();
 			System.out.println("");
-			// 회원 탈퇴
+
 			break;
 		case MENU_MEMBER.MAIN: // MENU_MEMBER의 상수 정수 5
 			return; // 나가기

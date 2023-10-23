@@ -10,6 +10,19 @@ public class MemberVO {
 	private String memName; // 이름
 	private String memPhone; // 핸드폰번호
 
+	public MemberVO() {
+		super();
+	}
+
+	public MemberVO(int no, String memId, String memPw, String memName, String memPhone) {
+		super();
+		this.no = no;
+		this.memId = memId;
+		this.memPw = memPw;
+		this.memName = memName;
+		this.memPhone = memPhone;
+	}
+
 	public int getNo() {
 		return no;
 	}

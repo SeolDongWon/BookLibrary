@@ -10,10 +10,14 @@ public class BookVO {
 	private String bookRelease; // 책 발행일
 	private String bookIntro;// 책소개
 
+	public BookVO() {
+		super();
+	}
+
 	public BookVO(int no, String iSBN, String bookTitle, String bookAuthor, String bookRelease, String bookIntro) {
 		super();
 		this.no = no;
-		ISBN = iSBN;
+		this.ISBN = iSBN;
 		this.bookTitle = bookTitle;
 		this.bookAuthor = bookAuthor;
 		this.bookRelease = bookRelease;

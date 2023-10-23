@@ -1,5 +1,6 @@
 package aMain;
 
+import controller.BookRegisterManager;
 import controller.MemberRegisterManager;
 import view.MENU_BOOK;
 import view.MENU_LIBRARY;
@@ -83,28 +84,28 @@ public class BookLibraryMain {
 	}
 
 	private static void bookInfoMenu() { // 도서 관리 메뉴
-		// 도서 관리 객체 자리
+		BookRegisterManager brm = new BookRegisterManager();
 		int selectMenu = 0;
 		// 객체 // 도서 관리 CRUD 컨트롤러
 		MenuViewer.bookMenuView();
 		selectMenu = MenuViewer.scan.nextInt(); // 도서 관리 메뉴 출력
 		MenuViewer.scan.nextLine(); // 도서 메뉴 입력
 		switch (selectMenu) {
-		case MENU_BOOK.LIST: // MENU_BOOKINFO의 상수 정수 1
+		case MENU_BOOK.LIST: // MENU_BOOKINFO의 상수 정수 1 // 도서 목록
+			brm.bookList();
 			System.out.println("");
-			// 도서 목록
 			break;
-		case MENU_BOOK.INSERT: // MENU_BOOKINFO의 상수 정수 2
+		case MENU_BOOK.INSERT: // MENU_BOOKINFO의 상수 정수 2 // 도서 등록
 			System.out.println("");
-			// 도서 등록
+			brm.bookRegistr();
 			break;
-		case MENU_BOOK.UPDATE: // MENU_BOOKINFO의 상수 정수 3
+		case MENU_BOOK.UPDATE: // MENU_BOOKINFO의 상수 정수 3 // 도서 수정
 			System.out.println("");
-			// 도서 수정
+			brm.bookUpdate();
 			break;
-		case MENU_BOOK.DELETE: // MENU_BOOKINFO의 상수 정수 4
+		case MENU_BOOK.DELETE: // MENU_BOOKINFO의 상수 정수 4 // 도서 삭제
 			System.out.println("");
-			// 도서 삭제
+			brm.bookDelete();
 			break;
 		case MENU_BOOK.MAIN: // MENU_BOOKINFO의 상수 정수 5
 			return; // 나가기

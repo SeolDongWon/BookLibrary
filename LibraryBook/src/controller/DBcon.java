@@ -39,7 +39,7 @@ public class DBcon {
 			e.printStackTrace();
 			System.out.println("SQLException 오류");
 		}
-		System.out.println("DB 연결성공");
+		System.out.printf("\nDB 연결성공\n");
 		return connection;
 	}
 

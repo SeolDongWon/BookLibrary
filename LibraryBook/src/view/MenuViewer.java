@@ -21,11 +21,12 @@ public class MenuViewer {
 	public static void memberMenuView() {
 		System.out.println();
 		System.out.println("회원 메뉴 번호를 입력하세요.");
-		System.out.println("1. 회원 정보");
+		System.out.println("1. 내 정보");
 		System.out.println("2. 회원 추가");
 		System.out.println("3. 회원 수정");
 		System.out.println("4. 회원 삭제");
-		System.out.println("5. 메인 메뉴");
+		System.out.println("5. 회원 리스트");
+		System.out.println("6. 메인 메뉴");
 		System.out.print("번호 선택>>");
 	}
 

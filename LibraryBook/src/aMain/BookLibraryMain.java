@@ -1,6 +1,7 @@
 package aMain;
 
 import controller.BookRegisterManager;
+import controller.LibraryRegisterManager;
 import controller.MemberRegisterManager;
 import view.MENU_BOOK;
 import view.MENU_LIBRARY;
@@ -45,6 +46,7 @@ public class BookLibraryMain {
 					System.out.println("해당 메뉴 번호만 입력하세요.");
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				System.out.println("\n입력에 오류가 있습니다.\n프로그램을다시 시작하세요.");
 				stopFlag = true;
 			}
@@ -59,8 +61,8 @@ public class BookLibraryMain {
 		selectMenu = MenuViewer.scan.nextInt(); // 회원 메뉴 입력
 		MenuViewer.scan.nextLine();
 		switch (selectMenu) {
-		case MENU_MEMBER.LIST: // MENU_MEMBER의 상수 정수 1 // 회원 목록
-			mrm.memberTotalList();
+		case MENU_MEMBER.MYINFO: // MENU_MEMBER의 상수 정수 1 // 회원 정보
+			mrm.memberInfo();
 			System.out.println("");
 			break;
 		case MENU_MEMBER.INSERT: // MENU_MEMBER의 상수 정수 2 // 회원 등록
@@ -74,9 +76,12 @@ public class BookLibraryMain {
 		case MENU_MEMBER.DELETE: // MENU_MEMBER의 상수 정수 4 // 회원 삭제
 			mrm.memberDelete();
 			System.out.println("");
-
 			break;
-		case MENU_MEMBER.MAIN: // MENU_MEMBER의 상수 정수 5
+		case MENU_MEMBER.LIST: // MENU_MEMBER의 상수 정수 5 // 모든 회원 리스트
+			mrm.memberTotalList();
+			System.out.println("");
+			break;
+		case MENU_MEMBER.MAIN: // MENU_MEMBER의 상수 정수 6
 			return; // 나가기
 		default:
 			System.out.println("해당 메뉴 번호만 입력하세요.");
@@ -115,32 +120,32 @@ public class BookLibraryMain {
 	}
 
 	private static void bookLoan() { // 도서관 이용메뉴 메뉴
-		// 도서관 이용메뉴 정보 객체 자리
+		LibraryRegisterManager lrm = new LibraryRegisterManager();// 도서관 이용메뉴 정보 객체 자리
 		int choice = 0;
 		// 도서관 이용메뉴 CRUD 컨트롤러
 		MenuViewer.libraryMenuView(); // 도서관 이용메뉴 메뉴 출력
 		choice = MenuViewer.scan.nextInt(); // 도서관 이용메뉴 메뉴 입력
 		MenuViewer.scan.nextLine();
 		switch (choice) {
-		case MENU_LIBRARY.LIST: // MENU_BOOKLOAN의 상수 정수 1
+		case MENU_LIBRARY.LIST: // MENU_BOOKLOAN의 상수 정수 1 // 도서 검색
+			lrm.bookSearch();
 			System.out.println("");
-			// 도서 검색
 			break;
-		case MENU_LIBRARY.LOAN: // MENU_BOOKLOAN의 상수 정수 2
+		case MENU_LIBRARY.LOAN: // MENU_BOOKLOAN의 상수 정수 2 // 도서 대출
+			lrm.bookBorrow();
 			System.out.println("");
-			// 도서 대출
 			break;
-		case MENU_LIBRARY.RESERVATION: // MENU_BOOKLOAN의 상수 정수 3
+		case MENU_LIBRARY.RESERVATION: // MENU_BOOKLOAN의 상수 정수 3 // 대출 예약
+			lrm.bookReserve();
 			System.out.println("");
-			// 대출 예약
 			break;
-		case MENU_LIBRARY.RETURN: // MENU_BOOKLOAN의 상수 정수 4
+		case MENU_LIBRARY.RETURN: // MENU_BOOKLOAN의 상수 정수 4 // 도서 반납
+			lrm.bookReturn();
 			System.out.println("");
-			// 도서 반납
 			break;
-		case MENU_LIBRARY.POSTPONE: // MENU_BOOKLOAN의 상수 정수 5
+		case MENU_LIBRARY.POSTPONE: // MENU_BOOKLOAN의 상수 정수 5 // 반납 연기
+			lrm.bookPostpone();
 			System.out.println("");
-			// 반납 연기
 			break;
 		case MENU_LIBRARY.MAIN: // MENU_BOOKLOAN의 상수 정수 6
 			return;

@@ -10,12 +10,12 @@ public class LibraryVO {
 	private String callNum; // 청구기호
 	private String bookLocation; // 책 위치
 	private String borrowState;// 대출 상태
-	private String memid;// 빌린사람
+	private String memId;// 빌린사람
 	private String returnDate;// 반납일
 	private String reserveState;// 예약 상태
 
 	public LibraryVO(int no, String isbn, String serial, String callNum, String bookLocation, String borrowState,
-			String memid, String returnDate, String reserveState) {
+			String memId, String returnDate, String reserveState) {
 		super();
 		this.no = no;
 		this.isbn = isbn;
@@ -23,7 +23,7 @@ public class LibraryVO {
 		this.callNum = callNum;
 		this.bookLocation = bookLocation;
 		this.borrowState = borrowState;
-		this.memid = memid;
+		this.memId = memId;
 		this.returnDate = returnDate;
 		this.reserveState = reserveState;
 	}
@@ -76,12 +76,12 @@ public class LibraryVO {
 		this.borrowState = borrowState;
 	}
 
-	public String getMemid() {
-		return memid;
+	public String getmemId() {
+		return memId;
 	}
 
-	public void setMemid(String memid) {
-		this.memid = memid;
+	public void setmemId(String memId) {
+		this.memId = memId;
 	}
 
 	public String getReturnDate() {
@@ -118,7 +118,7 @@ public class LibraryVO {
 	@Override
 	public String toString() {
 		return "LibraryVO [no=" + no + ", isbn=" + isbn + ", serial=" + serial + ", callNum=" + callNum
-				+ ", bookLocation=" + bookLocation + ", borrowState=" + borrowState + ", memid=" + memid
+				+ ", bookLocation=" + bookLocation + ", borrowState=" + borrowState + ", memId=" + memId
 				+ ", returnDate=" + returnDate + ", reserveState=" + reserveState + "]";
 	}
 

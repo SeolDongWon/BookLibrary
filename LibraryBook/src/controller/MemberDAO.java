@@ -90,6 +90,7 @@ public class MemberDAO {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
+
 		String sql = "select * from member where memId = ?"; // 등록할 아이디를 기준으로 하는 쿼리를 실행
 
 		try {
@@ -122,11 +123,11 @@ public class MemberDAO {
 	}
 
 	// 회원 로그인
-	public boolean getMemberLogin(String memId, String memPw) {
-		boolean loginFlag = false;
+	public MemberVO getMemberLogin(String memId, String memPw) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
+		MemberVO memVO = null;
 		String sql = "select * from member where memId = ? and memPw = ?";
 
 		try {
@@ -134,10 +135,16 @@ public class MemberDAO {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, memId);
 			pstmt.setString(2, memPw);
-			rs = pstmt.executeQuery();
 
+			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				loginFlag = true;
+				memVO = new MemberVO();
+				memVO.setNo(rs.getInt("no"));
+				memVO.setMemId(rs.getString("memId"));
+				memVO.setMemPw(rs.getString("memPw"));
+				memVO.setMemName(rs.getString("memName"));
+				memVO.setMemPhone(rs.getString("memPhone"));
+				System.out.println("로그인성공");
 			}
 
 		} catch (SQLException e) {
@@ -156,8 +163,44 @@ public class MemberDAO {
 				System.out.println("close오류");
 			}
 		}
-		return loginFlag;
+		return memVO;
 	}
+//	public boolean getMemberLogin(String memId, String memPw) {
+//		boolean loginFlag = false;
+//		Connection con = null;
+//		PreparedStatement pstmt = null;
+//		ResultSet rs = null;
+//		String sql = "select * from member where memId = ? and memPw = ?";
+//
+//		try {
+//			con = DBcon.getConnection();
+//			pstmt = con.prepareStatement(sql);
+//			pstmt.setString(1, memId);
+//			pstmt.setString(2, memPw);
+//			rs = pstmt.executeQuery();
+//
+//			if (rs.next()) {
+//				loginFlag = true;
+//			}
+//
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			System.out.println("SQLException 오류");
+//		} finally {
+//			try {
+//				if (rs != null)
+//					rs.close();
+//				if (pstmt != null)
+//					pstmt.close();
+//				if (con != null)
+//					con.close();
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//				System.out.println("close오류");
+//			}
+//		}
+//		return loginFlag;
+//	}
 
 	// 회원 이름
 	public String getMemberName(String memId, String memPw) {
@@ -194,16 +237,16 @@ public class MemberDAO {
 			}
 		}
 		return memName;
-
 	}
 
 	// 회원 정보
-	public void getMember(String memId, String memPw) {
+	public void getMemberInfo(String memId, String memPw) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		MemberVO memVO = null;
-		String sql = "select * from member where memId = ? and memPw = ?";
+//		String sql = "select * from member where memId = ? and memPw = ?";
+		String sql = "select * from member mb join library lb on lb.borrowmemid = mb.memid join book bk on lb.isbn = bk.isbn where memId = ? and memPw = ?";
 
 		try {
 			con = DBcon.getConnection();
@@ -224,9 +267,20 @@ public class MemberDAO {
 				System.out.printf("%-5d  %-10s  %-10s  %-10s  %-10s\n", memVO.getNo(), memVO.getMemId(),
 						memVO.getMemPw(), memVO.getMemName(), memVO.getMemPhone());
 
+				System.out.printf("\n대출도서\n");
+				System.out.printf("%-18s %-30s %-17s %-10s \n", "도서일련번호", "도서명", "저자", "반납일");
+
+				System.out.printf("%-20s %-25s %-15s %-10s \n", rs.getString("serial"), rs.getString("booktitle"),
+						rs.getString("bookauthor"), rs.getDate("returndate") + "");
+			}
+			while (rs.next()) {
+				System.out.printf("%-20s %-25s %-15s %-10s \n", rs.getString("serial"), rs.getString("booktitle"),
+						rs.getString("bookauthor"), rs.getDate("returndate") + "");
 			}
 
-		} catch (SQLException e) {
+		} catch (
+
+		SQLException e) {
 			e.printStackTrace();
 			System.out.println("SQLException 오류");
 		} finally {

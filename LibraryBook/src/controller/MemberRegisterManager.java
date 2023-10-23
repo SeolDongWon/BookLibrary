@@ -43,7 +43,7 @@ public class MemberRegisterManager {
 
 		System.out.println();
 		System.out.println("등록 회원 정보");
-		memDAO.getMember(memVO.getMemId(), memVO.getMemPw());
+		memDAO.getMemberInfo(memVO.getMemId(), memVO.getMemPw());
 		System.out.println();
 	}
 
@@ -65,9 +65,10 @@ public class MemberRegisterManager {
 			memId = input.nextLine();
 			System.out.print("비밀번호>>");
 			memPw = input.nextLine();
-			success = memDAO.getMemberLogin(memId, memPw);
 
-			if (!success) {
+			if (memDAO.getMemberLogin(memId, memPw) != null) {
+				success = true;
+			} else {
 				System.out.println("아이디 또는 비밀번호가 틀림 다시 입력");
 			}
 
@@ -90,7 +91,7 @@ public class MemberRegisterManager {
 
 		System.out.println();
 		System.out.println("회원 정보 수정 결과");
-		memDAO.getMember(memVO.getMemId(), memVO.getMemPw());
+		memDAO.getMemberInfo(memVO.getMemId(), memVO.getMemPw());
 		System.out.println();
 	}
 
@@ -106,19 +107,47 @@ public class MemberRegisterManager {
 			System.out.println("관리자 비밀번호가 틀립니다.");
 		}
 	}
+
 	// 회원 삭제
-		public void memberDelete() {
-			MemberDAO memDAO = new MemberDAO();
-			String pw = null;
-			System.out.printf("\n학생 정보 전체 목록\n관리자 비밀번호>>");
-			pw = input.nextLine();
-			if (pw.equals("1234")) {
-				String memId = null; // 아이디
-				System.out.print("삭제할 아이디>>");
-				memId = input.nextLine();
-				memDAO.deleteMember(memId);
-			} else {
-				System.out.println("관리자 비밀번호가 틀립니다.");
-			}
+	public void memberDelete() {
+		MemberDAO memDAO = new MemberDAO();
+		String pw = null;
+		System.out.printf("\n학생 정보 전체 목록\n관리자 비밀번호>>");
+		pw = input.nextLine();
+		if (pw.equals("1234")) {
+			String memId = null; // 아이디
+			System.out.print("삭제할 아이디>>");
+			memId = input.nextLine();
+			memDAO.deleteMember(memId);
+		} else {
+			System.out.println("관리자 비밀번호가 틀립니다.");
 		}
+	}
+
+	// 회원 정보 보기
+	public void memberInfo() {
+		MemberDAO memDAO = new MemberDAO();
+		MemberVO memVO = null;
+
+		String memId = null; // 아이디
+		String memPw = null; // 입력 비밀번호
+		boolean success = false;
+
+		System.out.println("로그인");
+		do {
+			System.out.print("아이디>>");
+			memId = input.nextLine();
+			System.out.print("비밀번호>>");
+			memPw = input.nextLine();
+
+			if ((memVO = memDAO.getMemberLogin(memId, memPw)) != null) {
+				success = true;
+			} else {
+				System.out.println("아이디 또는 비밀번호가 틀림 다시 입력");
+			}
+
+		} while (!success);
+
+		memDAO.getMemberInfo(memVO.getMemId(), memVO.getMemPw());
+	}
 }

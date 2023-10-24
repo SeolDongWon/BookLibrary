@@ -2,9 +2,22 @@ package controller;
 
 import java.util.Scanner;
 import model.BookVO;
+import model.LibraryVO;
 
 public class BookRegisterManager {
 	public static Scanner scan = new Scanner(System.in);
+	
+	public void memberTotalList() {
+		MemberDAO memDAO = new MemberDAO();
+		String pw = null;
+		System.out.printf("\n회원 정보 전체 목록\n관리자 비밀번호>>");
+		pw = scan.nextLine();
+		if (pw.equals("1234")) {
+			memDAO.getMemberList();
+		} else {
+			System.out.println("관리자 비밀번호가 틀립니다.");
+		}
+	}
 
 	// 도서 목록
 	public void bookList() {
@@ -61,9 +74,9 @@ public class BookRegisterManager {
 		BookDAO bkDAO = new BookDAO();
 		BookVO bkVO = new BookVO();
 
-		System.out.println("과목 전체 리스트(사용중인 과목 변경 불가)");
+		System.out.println("도서 목록");
 		bkDAO.getBooklList();
-		
+
 		int no = 0; // 수정할 과목 일련번호
 		System.out.println();
 		System.out.println("수정할 도서 일련번호 입력");
@@ -100,7 +113,7 @@ public class BookRegisterManager {
 		bkDAO.setbookUpdate(bkVO);
 
 		System.out.println();
-		System.out.println("과목 전체 리스트");
+		System.out.println("도서 목록");
 		bkDAO.getBooklList();
 		System.out.println();
 	}
@@ -126,4 +139,81 @@ public class BookRegisterManager {
 		bkDAO.getBooklList();
 		System.out.println();
 	}
+
+	// 도서관 보유 도서 목록
+	public void libraryBookList() {
+		LibraryDAO lbDAO = new LibraryDAO();
+		lbDAO.libraryBookList();
+
+	}
+
+	// 도서 검색
+	public void bookSearch() {
+		LibraryDAO lbDAO = new LibraryDAO();
+		String bookTitle = null;
+
+		System.out.println("검색할 도서 제목 입력");
+		bookTitle = scan.nextLine();
+
+		lbDAO.searchBook(bookTitle);
+	}
+
+	// 소장 도서 추가
+	public void collectionAdd() {
+		BookDAO bkDAO = new BookDAO();
+		LibraryDAO lbDAO = new LibraryDAO();
+		LibraryVO lbVO = null;
+
+		String isbn = null;
+		String serial = null;
+		String callNum = null;
+		String bookLocation = null;
+		String countNum = null;
+
+		bkDAO.getBooklList();
+
+		System.out.println();
+		System.out.println("도서 정보 입력");
+		System.out.print("ISBN : ");
+		isbn = scan.nextLine().trim();
+//		lbVO.setIsbn(scan.nextLine().trim());
+		countNum = bkDAO.collectionCount(isbn);
+		serial = isbn + countNum;
+
+		// 이미 등록한 도서인지 확인
+		if ((lbVO = lbDAO.getBookOverlap(isbn, countNum)) != null) {
+			lbVO.setSerial(serial);
+		} else {
+			System.out.print("청구기호 : ");
+			callNum = scan.nextLine();
+			System.out.print("도서위치 : ");
+			bookLocation = scan.nextLine();
+//			lbVO.setBookLocation(scan.nextLine());
+
+			lbVO = new LibraryVO();
+			lbVO.setIsbn(isbn);
+			lbVO.setSerial(serial);
+			lbVO.setCallNum(callNum);
+			lbVO.setBookLocation(bookLocation);
+		}
+		bkDAO.collectionAdd(lbVO);
+
+//		lbVO.setSerial(lbVO.getIsbn() + bkDAO.getBookCount(lbVO));
+
+//		lbVO.setCallNum(scan.nextLine());
+
+		System.out.println();
+
+	}
+
+	// 소장 도서 삭제
+	public void collectionDelete() {
+		BookDAO bkDAO = new BookDAO();
+		String serial = null;
+		System.out.printf("\n삭제할 소장 도서의 serial 입력\n>>");
+		serial = scan.nextLine();
+		bkDAO.collectionDelete(serial);
+
+	}
+
 }

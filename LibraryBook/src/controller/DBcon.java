@@ -15,7 +15,7 @@ public class DBcon {
 		FileInputStream fileInputStream = null;
 
 		try {
-			fileInputStream = new FileInputStream("src/config/db.properties");
+			fileInputStream = new FileInputStream("src/proper/db.properties");
 			properties.load(fileInputStream);
 
 			String driver = properties.getProperty("driver"); // 드라이버 클래스 경로

@@ -14,6 +14,10 @@ public class LibraryVO {
 	private String returnDate;// 반납일
 	private String reserveState;// 예약 상태
 
+	public LibraryVO() {
+		super();
+	}
+
 	public LibraryVO(int no, String isbn, String serial, String callNum, String bookLocation, String borrowState,
 			String memId, String returnDate, String reserveState) {
 		super();

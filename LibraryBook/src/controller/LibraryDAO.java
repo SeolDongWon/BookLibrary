@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import model.LibraryVO;
 //import model.LibraryVO;
 import model.MemberVO;
 
@@ -135,28 +136,31 @@ public class LibraryDAO {
 	}
 
 	// 도서 반납
-	public void returnBook(String serial) {
+	public void returnBook(String serial, MemberVO memVO) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 //		ResultSet rs = null;
 
-		String sql = "update Library set borrowState = '' , borrowMemid = '', returnDate = '' where serial = ?";
+		String sql = "update Library set borrowState = '' , borrowMemid = '', returnDate = '' where serial = ? AND borrowMemid = ?";
 		try {
 			con = DBcon.getConnection();
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, serial);
+			pstmt.setString(2, memVO.getMemId());
 
 			int cnt = pstmt.executeUpdate();
 			if (cnt >= 1) {
 				System.out.println("반납 성공");
 			} else {
-				System.out.println("반납 실패");
+				System.out.printf("\n반납 실패\n");
 			}
 
 		} catch (SQLException e) {
 			System.out.println(e);
+			System.out.printf("\n반납 실패\n");
 		} catch (Exception e) {
 			System.out.println();
+			System.out.printf("\n반납 실패\n");
 		} finally {
 			try {
 				if (pstmt != null)
@@ -301,6 +305,87 @@ public class LibraryDAO {
 				System.out.println(e);
 			}
 		}
-
 	}
+
+	// 도서관 보유 도서 목록
+	public void libraryBookList() {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			con = DBcon.getConnection();
+			String sql = "select * from library lb inner join book bk on lb.isbn = bk.isbn order by serial";
+			pstmt = con.prepareStatement(sql);
+
+			System.out.printf("%-19s %-28s %-11s %-14s %-6s %-8s %-13s %s\n", "일련번호", "도서명", "작가", "청구기호", "도서위치",
+					"대출상태", "반납일", "예약상태");
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				System.out.printf("%-20s %-25s %-10s %-15s %-7s %-8s %-15s %s\n", rs.getString("serial"),
+						rs.getString("booktitle"), rs.getString("bookauthor"), rs.getString("callnum"),
+						rs.getString("booklocation"), rs.getString("borrowstate"), rs.getDate("returndate"),
+						rs.getString("reservestate"));
+			}
+
+		} catch (SQLException e) {
+			System.out.println(e);
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			try {
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				System.out.println(e);
+			}
+		}
+	}
+
+	// 보유 도서 중복 체크
+	public LibraryVO getBookOverlap(String isbn, String countNum) {
+		LibraryVO templbVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		String sql = "select * from library where isbn = ?";
+
+		try {
+			con = DBcon.getConnection();
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, isbn);
+			rs = pstmt.executeQuery();
+			// 시리얼은 리턴을 나가서 받는다
+			if (rs.next()) {
+				templbVO = new LibraryVO();
+				templbVO.setIsbn(rs.getString("isbn"));
+				templbVO.setCallNum(rs.getString("CallNum") + "=" + countNum);
+				templbVO.setBookLocation(rs.getString("BookLocation"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("SQLException 오류");
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("close오류");
+			}
+		}
+		return templbVO;
+	}
+
 }

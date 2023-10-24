@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import model.BookVO;
+import model.LibraryVO;
 
 public class BookDAO {
 	// 도서 목록
@@ -157,4 +158,110 @@ public class BookDAO {
 			}
 		}
 	}
+
+	// 소장 도서 추가
+	public void collectionAdd(LibraryVO lbVO) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		String sql = "insert into Library values(Library_no_seq.nextval,?,?,?,?,'','','','','')";
+		try {
+			con = DBcon.getConnection();
+			pstmt = con.prepareStatement(sql.toString());
+			pstmt.setString(1, lbVO.getIsbn());
+			pstmt.setString(2, lbVO.getSerial());
+			pstmt.setString(3, lbVO.getCallNum());
+			pstmt.setString(4, lbVO.getBookLocation());
+
+			int cnt = pstmt.executeUpdate();
+			if (cnt >= 1) {
+				System.out.println("도서관에 책 추가 완료");
+			} else {
+				System.out.println("도서관에 책 추가 실패");
+			}
+		} catch (SQLException e) {
+			System.out.println(e);
+			System.out.println("SQLException 오류");
+		} finally {
+			try {
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				System.out.println("close 오류");
+			}
+		}
+	}
+
+	// 보유 도서 카운트
+	public String collectionCount(String isbn) {
+		String bookCount = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "select LPAD(count(*)+1, 2,'0') as bookCount from library where isbn = ?";
+
+		try {
+			con = DBcon.getConnection();
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, isbn);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				System.out.println(rs.getString("bookCount"));
+				bookCount = rs.getString("bookCount");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("SQLException 오류");
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("close오류");
+			}
+		}
+		return bookCount;
+	}
+
+	// 도서 삭제
+	public void collectionDelete(String serail) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		String sql = "delete from library where serial = ?";
+		try {
+			con = DBcon.getConnection();
+			pstmt = con.prepareStatement(sql.toString());
+			pstmt.setString(1, serail);
+
+			int cnt = pstmt.executeUpdate();
+			if (cnt >= 1) {
+				System.out.println("소장 도서 삭제 완료");
+			} else {
+				System.out.println("소장 도서 삭제 실패");
+			}
+		} catch (SQLException e) {
+			System.out.println(e);
+			System.out.println("SQLException 오류");
+		} finally {
+			try {
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				System.out.println("close 오류");
+			}
+		}
+	}
+
 }

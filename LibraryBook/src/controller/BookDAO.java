@@ -1,9 +1,12 @@
 package controller;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
+
 import model.BookVO;
 import model.LibraryVO;
 
@@ -55,18 +58,26 @@ public class BookDAO {
 	// 도서 등록
 	public void setBookRegister(BookVO bkVO) {
 		Connection con = null;
-		PreparedStatement pstmt = null;
-		String sql = "insert into book values (book_no_seq.nextval, ?, ?,?,?,?)";
+//		PreparedStatement pstmt = null;
+		CallableStatement cstmt = null;
+//		String sql = "insert into book values (book_no_seq.nextval, ?, ?,?,?,?)";
 		try {
 			con = DBcon.getConnection();
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, bkVO.getISBN());
-			pstmt.setString(2, bkVO.getBookTitle());
-			pstmt.setString(3, bkVO.getBookAuthor());
-			pstmt.setString(4, bkVO.getBookRelease());
-			pstmt.setString(5, bkVO.getBookIntro());
+			cstmt = con.prepareCall("{call pro_in_book(?,?,?,?,?)}");
+			cstmt.setString(1, bkVO.getISBN());
+			cstmt.setString(2, bkVO.getBookTitle());
+			cstmt.setString(3, bkVO.getBookAuthor());
+			cstmt.setString(4, bkVO.getBookRelease());
+			cstmt.setString(5, bkVO.getBookIntro());
+//			pstmt = con.prepareStatement(sql);
+//			pstmt.setString(1, bkVO.getISBN());
+//			pstmt.setString(2, bkVO.getBookTitle());
+//			pstmt.setString(3, bkVO.getBookAuthor());
+//			pstmt.setString(4, bkVO.getBookRelease());
+//			pstmt.setString(5, bkVO.getBookIntro());
 
-			int cnt = pstmt.executeUpdate();
+//			int cnt = pstmt.executeUpdate();
+			int cnt = cstmt.executeUpdate();
 			if (cnt >= 1) {
 				System.out.println(bkVO.getBookTitle() + " 도서 등록 완료");
 			} else {
@@ -77,8 +88,10 @@ public class BookDAO {
 			System.out.println("SQLException 오류");
 		} finally {
 			try {
-				if (pstmt != null)
-					pstmt.close();
+//				if (pstmt != null)
+//					pstmt.close();
+				if (cstmt != null)
+					cstmt.close();
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
@@ -91,21 +104,31 @@ public class BookDAO {
 	public boolean setbookUpdate(BookVO bkVO) {
 		boolean updateFlag = false;
 		Connection con = null;
-		PreparedStatement pstmt = null;
+//		PreparedStatement pstmt = null;
+		CallableStatement cstmt = null;
 
-		String sql = "update book set ISBN=?, bookTitle=? ,bookAuthor=?, bookRelease=? ,bookIntro=? where no=?";
+//		String sql = "update book set ISBN=?, bookTitle=? ,bookAuthor=?, bookRelease=? ,bookIntro=? where no=?";
 
 		try {
 			con = DBcon.getConnection();
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, bkVO.getISBN());
-			pstmt.setString(2, bkVO.getBookTitle());
-			pstmt.setString(3, bkVO.getBookAuthor());
-			pstmt.setString(4, bkVO.getBookRelease());
-			pstmt.setString(5, bkVO.getBookIntro());
-			pstmt.setInt(6, bkVO.getNo());
+			cstmt = con.prepareCall("{call pro_up_book(?,?,?,?,?,?)}");
+			cstmt.setString(1, bkVO.getISBN());
+			cstmt.setString(2, bkVO.getBookTitle());
+			cstmt.setString(3, bkVO.getBookAuthor());
+			cstmt.setString(4, bkVO.getBookRelease());
+			cstmt.setString(5, bkVO.getBookIntro());
+			cstmt.setInt(6, bkVO.getNo());
 
-			int cnt = pstmt.executeUpdate();
+//			pstmt = con.prepareStatement(sql);
+//			pstmt.setString(1, bkVO.getISBN());
+//			pstmt.setString(2, bkVO.getBookTitle());
+//			pstmt.setString(3, bkVO.getBookAuthor());
+//			pstmt.setString(4, bkVO.getBookRelease());
+//			pstmt.setString(5, bkVO.getBookIntro());
+//			pstmt.setInt(6, bkVO.getNo());
+
+//			int cnt = pstmt.executeUpdate();
+			int cnt = cstmt.executeUpdate();
 			if (cnt >= 1) {
 				System.out.println(bkVO.getBookTitle() + " 도서 수정 완료");
 			} else {
@@ -116,8 +139,10 @@ public class BookDAO {
 			System.out.println("SQLException 오류");
 		} finally {
 			try {
-				if (pstmt != null)
-					pstmt.close();
+//				if (pstmt != null)
+//					pstmt.close();
+				if (cstmt != null)
+					cstmt.close();
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
@@ -130,15 +155,19 @@ public class BookDAO {
 	// 도서 삭제
 	public void setbookDelete(int no) {
 		Connection con = null;
-		PreparedStatement pstmt = null;
+//		PreparedStatement pstmt = null;
+		CallableStatement cstmt = null;
 
-		String sql = "delete from book where no = ?";
+//		String sql = "delete from book where no = ?";
 		try {
 			con = DBcon.getConnection();
-			pstmt = con.prepareStatement(sql.toString());
-			pstmt.setInt(1, no);
+			cstmt = con.prepareCall("{call pro_del_book(?)}");
+			cstmt.setInt(1, no);
 
-			int cnt = pstmt.executeUpdate();
+//			pstmt = con.prepareStatement(sql.toString());
+//			pstmt.setInt(1, no);
+//			int cnt = pstmt.executeUpdate();
+			int cnt = cstmt.executeUpdate();
 			if (cnt >= 1) {
 				System.out.println("도서 삭제 완료");
 			} else {
@@ -149,8 +178,10 @@ public class BookDAO {
 			System.out.println("SQLException 오류");
 		} finally {
 			try {
-				if (pstmt != null)
-					pstmt.close();
+//				if (pstmt != null)
+//					pstmt.close();
+				if (cstmt != null)
+					cstmt.close();
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
@@ -162,18 +193,27 @@ public class BookDAO {
 	// 소장 도서 추가
 	public void collectionAdd(LibraryVO lbVO) {
 		Connection con = null;
-		PreparedStatement pstmt = null;
+//		PreparedStatement pstmt = null;
+		CallableStatement cstmt = null;
 
-		String sql = "insert into Library values(Library_no_seq.nextval,?,?,?,?,'','','','','')";
+//		String sql = "insert into Library values(Library_no_seq.nextval,?,?,?,?,'','','','','')";
 		try {
 			con = DBcon.getConnection();
-			pstmt = con.prepareStatement(sql.toString());
-			pstmt.setString(1, lbVO.getIsbn());
-			pstmt.setString(2, lbVO.getSerial());
-			pstmt.setString(3, lbVO.getCallNum());
-			pstmt.setString(4, lbVO.getBookLocation());
+			cstmt = con.prepareCall("{call pro_in_library(?,?,?,?)}");
 
-			int cnt = pstmt.executeUpdate();
+			cstmt.setString(1, lbVO.getIsbn());
+			cstmt.setString(2, lbVO.getSerial());
+			cstmt.setString(3, lbVO.getCallNum());
+			cstmt.setString(4, lbVO.getBookLocation());
+
+//			pstmt = con.prepareStatement(sql.toString());
+//			pstmt.setString(1, lbVO.getIsbn());
+//			pstmt.setString(2, lbVO.getSerial());
+//			pstmt.setString(3, lbVO.getCallNum());
+//			pstmt.setString(4, lbVO.getBookLocation());
+//			int cnt = pstmt.executeUpdate();
+
+			int cnt = cstmt.executeUpdate();
 			if (cnt >= 1) {
 				System.out.println("도서관에 책 추가 완료");
 			} else {
@@ -184,8 +224,10 @@ public class BookDAO {
 			System.out.println("SQLException 오류");
 		} finally {
 			try {
-				if (pstmt != null)
-					pstmt.close();
+//				if (pstmt != null)
+//					pstmt.close();
+				if (cstmt != null)
+					cstmt.close();
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
@@ -198,30 +240,39 @@ public class BookDAO {
 	public String collectionCount(String isbn) {
 		String bookCount = null;
 		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		String sql = "select LPAD(count(*)+1, 2,'0') as bookCount from library where isbn = ?";
+//		PreparedStatement pstmt = null;
+		CallableStatement cstmt = null;
+//		ResultSet rs = null;
+//		String sql = "select LPAD(count(*)+1, 2,'0') as bookCount from library where isbn = ?";
 
 		try {
 			con = DBcon.getConnection();
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, isbn);
-			rs = pstmt.executeQuery();
+			cstmt = con.prepareCall("{call pro_cnt_library(?,?)}");
+			cstmt.setString(1, isbn);
+			cstmt.registerOutParameter(2, Types.VARCHAR);
+			cstmt.executeUpdate();
 
-			if (rs.next()) {
-				System.out.println(rs.getString("bookCount"));
-				bookCount = rs.getString("bookCount");
-			}
+//			pstmt = con.prepareStatement(sql);
+//			pstmt.setString(1, isbn);
+//			rs = pstmt.executeQuery();
+			System.out.println(cstmt.getString(2));
+			bookCount = cstmt.getString(2);
+//			if (rs.next()) {
+//				System.out.println(rs.getString("bookCount"));
+//				bookCount = rs.getString("bookCount");
+//			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("SQLException 오류");
 		} finally {
 			try {
-				if (rs != null)
-					rs.close();
-				if (pstmt != null)
-					pstmt.close();
+//				if (rs != null)
+//					rs.close();
+//				if (pstmt != null)
+//					pstmt.close();
+				if (cstmt != null)
+					cstmt.close();
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
@@ -235,15 +286,18 @@ public class BookDAO {
 	// 도서 삭제
 	public void collectionDelete(String serail) {
 		Connection con = null;
-		PreparedStatement pstmt = null;
+//		PreparedStatement pstmt = null;
+		CallableStatement cstmt = null;
 
-		String sql = "delete from library where serial = ?";
+//		String sql = "delete from library where serial = ?";
 		try {
 			con = DBcon.getConnection();
-			pstmt = con.prepareStatement(sql.toString());
-			pstmt.setString(1, serail);
-
-			int cnt = pstmt.executeUpdate();
+			cstmt = con.prepareCall("{call pro_del_library(?)}");
+			cstmt.setString(1, serail);
+//			pstmt = con.prepareStatement(sql.toString());
+//			pstmt.setString(1, serail);
+//			int cnt = pstmt.executeUpdate();
+			int cnt = cstmt.executeUpdate();
 			if (cnt >= 1) {
 				System.out.println("소장 도서 삭제 완료");
 			} else {
@@ -254,8 +308,10 @@ public class BookDAO {
 			System.out.println("SQLException 오류");
 		} finally {
 			try {
-				if (pstmt != null)
-					pstmt.close();
+//				if (pstmt != null)
+//					pstmt.close();
+				if (cstmt != null)
+					cstmt.close();
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {

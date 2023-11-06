@@ -1,5 +1,6 @@
 package controller;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -101,18 +102,22 @@ public class LibraryDAO {
 	// 도서 대출
 	public void borrowBook(MemberVO memVO, String serial) {
 		Connection con = null;
-		PreparedStatement pstmt = null;
-//		ResultSet rs = null;
+//		PreparedStatement pstmt = null;
+		CallableStatement cstmt = null;
 
-		String sql = "update Library set borrowState = ? , borrowMemid = ?, returnDate = sysdate+1, reserveState ='', reserveMemid = ''where serial = ?";
+//		String sql = "update Library set borrowState = ? , borrowMemid = ?, returnDate = sysdate+1, reserveState ='', reserveMemid = ''where serial = ?";
 		try {
 			con = DBcon.getConnection();
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, "대출중");
-			pstmt.setString(2, memVO.getMemId());
-			pstmt.setString(3, serial);
+			cstmt = con.prepareCall("{call pro_borrowbook_library(?,?)}");
+			cstmt.setString(1, memVO.getMemId());
+			cstmt.setString(2, serial);
 
-			int cnt = pstmt.executeUpdate();
+//			pstmt = con.prepareStatement(sql);
+//			pstmt.setString(1, "대출중");
+//			pstmt.setString(2, memVO.getMemId());
+//			pstmt.setString(3, serial);
+//			int cnt = pstmt.executeUpdate();
+			int cnt = cstmt.executeUpdate();
 			if (cnt >= 1) {
 				System.out.println("대출 성공");
 			} else {
@@ -125,8 +130,10 @@ public class LibraryDAO {
 			System.out.println();
 		} finally {
 			try {
-				if (pstmt != null)
-					pstmt.close();
+				if (cstmt != null)
+					cstmt.close();
+//				if (pstmt != null)
+//					pstmt.close();
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
@@ -138,17 +145,23 @@ public class LibraryDAO {
 	// 도서 반납
 	public void returnBook(String serial, MemberVO memVO) {
 		Connection con = null;
-		PreparedStatement pstmt = null;
+//		PreparedStatement pstmt = null;
 //		ResultSet rs = null;
+		CallableStatement cstmt = null;
 
-		String sql = "update Library set borrowState = '' , borrowMemid = '', returnDate = '' where serial = ? AND borrowMemid = ?";
+//		String sql = "update Library set borrowState = '' , borrowMemid = '', returnDate = '' where serial = ? AND borrowMemid = ?";
 		try {
 			con = DBcon.getConnection();
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, serial);
-			pstmt.setString(2, memVO.getMemId());
+			cstmt = con.prepareCall("{call pro_returnbook_library(?,?)}");
+			cstmt.setString(1, memVO.getMemId());
+			cstmt.setString(2, serial);
 
-			int cnt = pstmt.executeUpdate();
+//			pstmt = con.prepareStatement(sql);
+//			pstmt.setString(1, serial);
+//			pstmt.setString(2, memVO.getMemId());
+//			int cnt = pstmt.executeUpdate();
+
+			int cnt = cstmt.executeUpdate();
 			if (cnt >= 1) {
 				System.out.println("반납 성공");
 			} else {
@@ -163,8 +176,10 @@ public class LibraryDAO {
 			System.out.printf("\n반납 실패\n");
 		} finally {
 			try {
-				if (pstmt != null)
-					pstmt.close();
+//				if (pstmt != null)
+//					pstmt.close();
+				if (cstmt != null)
+					cstmt.close();
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
@@ -176,18 +191,24 @@ public class LibraryDAO {
 	// 도서 예약
 	public void reserveBook(MemberVO memVO, String serial) {
 		Connection con = null;
-		PreparedStatement pstmt = null;
+//		PreparedStatement pstmt = null;
 //		ResultSet rs = null;
+		CallableStatement cstmt = null;
 
-		String sql = "update Library set reserveState = ? , reserveMemid = ? where serial = ?";
+//		String sql = "update Library set reserveState = ? , reserveMemid = ? where serial = ?";
 		try {
 			con = DBcon.getConnection();
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, "예약중");
-			pstmt.setString(2, memVO.getMemId());
-			pstmt.setString(3, serial);
+			cstmt = con.prepareCall("{call pro_reservebook_library(?,?)}");
+			cstmt.setString(1, memVO.getMemId());
+			cstmt.setString(2, serial);
 
-			int cnt = pstmt.executeUpdate();
+//			pstmt = con.prepareStatement(sql);
+//			pstmt.setString(1, "예약중");
+//			pstmt.setString(2, memVO.getMemId());
+//			pstmt.setString(3, serial);
+//			int cnt = pstmt.executeUpdate();
+
+			int cnt = cstmt.executeUpdate();
 			if (cnt >= 1) {
 				System.out.println("대출예약 성공");
 			} else {
@@ -200,8 +221,10 @@ public class LibraryDAO {
 			System.out.println();
 		} finally {
 			try {
-				if (pstmt != null)
-					pstmt.close();
+//				if (pstmt != null)
+//					pstmt.close();
+				if (cstmt != null)
+					cstmt.close();
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
@@ -261,19 +284,25 @@ public class LibraryDAO {
 	// 반납 연기
 	public void postponeBook(MemberVO memVO, String serial) {
 		Connection con = null;
-		PreparedStatement pstmt = null;
+//		PreparedStatement pstmt = null;
 //		ResultSet rs = null;
+		CallableStatement cstmt = null;
 
-		String sql = "update library set returnDate = (select returnDate from library where serial = ?)+1 where serial = ? AND borrowMemid = ? AND reserveState is null";
+//		String sql = "update library set returnDate = (select returnDate from library where serial = ?)+1 where serial = ? AND borrowMemid = ? AND reserveState is null";
 		try {
 			con = DBcon.getConnection();
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, serial);
-			pstmt.setString(2, serial);
-			pstmt.setString(3, memVO.getMemId());
-
+			cstmt = con.prepareCall("{call pro_postponebook_library(?,?)}");
+			cstmt.setString(1, memVO.getMemId());
+			cstmt.setString(2, serial);
+//			
+//			pstmt = con.prepareStatement(sql);
+//			pstmt.setString(1, serial);
+//			pstmt.setString(2, serial);
+//			pstmt.setString(3, memVO.getMemId());
 //			rs = pstmt.executeQuery();
-			int cnt = pstmt.executeUpdate();
+//			int cnt = pstmt.executeUpdate();
+
+			int cnt = cstmt.executeUpdate();
 			if (cnt >= 1) {
 //			if (rs.next()) {
 				System.out.println("반납 연기 성공");
@@ -294,8 +323,10 @@ public class LibraryDAO {
 			System.out.println();
 		} finally {
 			try {
-				if (pstmt != null)
-					pstmt.close();
+//				if (pstmt != null)
+//					pstmt.close();
+				if (cstmt != null)
+					cstmt.close();
 				if (con != null)
 					con.close();
 //				if (rs != null) {

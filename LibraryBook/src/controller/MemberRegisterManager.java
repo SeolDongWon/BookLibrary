@@ -25,7 +25,7 @@ public class MemberRegisterManager {
 		inputPw = scan.nextLine();
 
 		try {
-			fileInputStream = new FileInputStream("src/config/db.properties");
+			fileInputStream = new FileInputStream("src/proper/db.properties");
 			properties.load(fileInputStream);
 
 		} catch (FileNotFoundException e) {

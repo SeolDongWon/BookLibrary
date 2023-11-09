@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import model.LibraryVO;
 //import model.LibraryVO;
@@ -102,26 +103,20 @@ public class LibraryDAO {
 	// 도서 대출
 	public void borrowBook(MemberVO memVO, String serial) {
 		Connection con = null;
-//		PreparedStatement pstmt = null;
 		CallableStatement cstmt = null;
 
-//		String sql = "update Library set borrowState = ? , borrowMemid = ?, returnDate = sysdate+1, reserveState ='', reserveMemid = ''where serial = ?";
 		try {
 			con = DBcon.getConnection();
-			cstmt = con.prepareCall("{call pro_borrowbook_library(?,?)}");
+			cstmt = con.prepareCall("{call pro_borrowbook_library(?,?,?)}");
 			cstmt.setString(1, memVO.getMemId());
 			cstmt.setString(2, serial);
+			cstmt.registerOutParameter(3, Types.NUMERIC);
+			cstmt.executeUpdate();
 
-//			pstmt = con.prepareStatement(sql);
-//			pstmt.setString(1, "대출중");
-//			pstmt.setString(2, memVO.getMemId());
-//			pstmt.setString(3, serial);
-//			int cnt = pstmt.executeUpdate();
-			int cnt = cstmt.executeUpdate();
-			if (cnt >= 1) {
-				System.out.println("대출 성공");
-			} else {
+			if (cstmt.getInt(3) == 0) {
 				System.out.println("대출 실패");
+			} else {
+				System.out.println("대출 성공");
 			}
 
 		} catch (SQLException e) {
@@ -132,8 +127,6 @@ public class LibraryDAO {
 			try {
 				if (cstmt != null)
 					cstmt.close();
-//				if (pstmt != null)
-//					pstmt.close();
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
@@ -145,39 +138,30 @@ public class LibraryDAO {
 	// 도서 반납
 	public void returnBook(String serial, MemberVO memVO) {
 		Connection con = null;
-//		PreparedStatement pstmt = null;
-//		ResultSet rs = null;
 		CallableStatement cstmt = null;
 
-//		String sql = "update Library set borrowState = '' , borrowMemid = '', returnDate = '' where serial = ? AND borrowMemid = ?";
 		try {
 			con = DBcon.getConnection();
-			cstmt = con.prepareCall("{call pro_returnbook_library(?,?)}");
+			cstmt = con.prepareCall("{call pro_returnbook_library(?,?,?)}");
 			cstmt.setString(1, memVO.getMemId());
 			cstmt.setString(2, serial);
+			cstmt.registerOutParameter(3, Types.NUMERIC);
+			cstmt.executeUpdate();
 
-//			pstmt = con.prepareStatement(sql);
-//			pstmt.setString(1, serial);
-//			pstmt.setString(2, memVO.getMemId());
-//			int cnt = pstmt.executeUpdate();
-
-			int cnt = cstmt.executeUpdate();
-			if (cnt >= 1) {
-				System.out.println("반납 성공");
+			if (cstmt.getInt(3) == 0) {
+				System.out.println("반납 실패");
 			} else {
-				System.out.printf("\n반납 실패\n");
+				System.out.println("반납 성공");
 			}
 
 		} catch (SQLException e) {
 			System.out.println(e);
-			System.out.printf("\n반납 실패\n");
+			System.out.println("반납 실패");
 		} catch (Exception e) {
-			System.out.println();
-			System.out.printf("\n반납 실패\n");
+			System.out.println(e);
+			System.out.println("반납 실패");
 		} finally {
 			try {
-//				if (pstmt != null)
-//					pstmt.close();
 				if (cstmt != null)
 					cstmt.close();
 				if (con != null)
@@ -191,28 +175,20 @@ public class LibraryDAO {
 	// 도서 예약
 	public void reserveBook(MemberVO memVO, String serial) {
 		Connection con = null;
-//		PreparedStatement pstmt = null;
-//		ResultSet rs = null;
 		CallableStatement cstmt = null;
 
-//		String sql = "update Library set reserveState = ? , reserveMemid = ? where serial = ?";
 		try {
 			con = DBcon.getConnection();
-			cstmt = con.prepareCall("{call pro_reservebook_library(?,?)}");
+			cstmt = con.prepareCall("{call pro_reservebook_library(?,?,?)}");
 			cstmt.setString(1, memVO.getMemId());
 			cstmt.setString(2, serial);
+			cstmt.registerOutParameter(3, Types.NUMERIC);
+			cstmt.executeUpdate();
 
-//			pstmt = con.prepareStatement(sql);
-//			pstmt.setString(1, "예약중");
-//			pstmt.setString(2, memVO.getMemId());
-//			pstmt.setString(3, serial);
-//			int cnt = pstmt.executeUpdate();
-
-			int cnt = cstmt.executeUpdate();
-			if (cnt >= 1) {
-				System.out.println("대출예약 성공");
-			} else {
+			if (cstmt.getInt(3) == 0) {
 				System.out.println("대출예약 실패");
+			} else {
+				System.out.println("대출예약 성공");
 			}
 
 		} catch (SQLException e) {
@@ -221,8 +197,6 @@ public class LibraryDAO {
 			System.out.println();
 		} finally {
 			try {
-//				if (pstmt != null)
-//					pstmt.close();
 				if (cstmt != null)
 					cstmt.close();
 				if (con != null)
@@ -231,7 +205,6 @@ public class LibraryDAO {
 				System.out.println(e);
 			}
 		}
-
 	}
 
 	// 도서 예약 상태 확인
@@ -284,38 +257,24 @@ public class LibraryDAO {
 	// 반납 연기
 	public void postponeBook(MemberVO memVO, String serial) {
 		Connection con = null;
-//		PreparedStatement pstmt = null;
-//		ResultSet rs = null;
 		CallableStatement cstmt = null;
 
-//		String sql = "update library set returnDate = (select returnDate from library where serial = ?)+1 where serial = ? AND borrowMemid = ? AND reserveState is null";
 		try {
 			con = DBcon.getConnection();
-			cstmt = con.prepareCall("{call pro_postponebook_library(?,?)}");
+			cstmt = con.prepareCall("{call pro_postponebook_library(?,?,?,?)}");
 			cstmt.setString(1, memVO.getMemId());
 			cstmt.setString(2, serial);
-//			
-//			pstmt = con.prepareStatement(sql);
-//			pstmt.setString(1, serial);
-//			pstmt.setString(2, serial);
-//			pstmt.setString(3, memVO.getMemId());
-//			rs = pstmt.executeQuery();
-//			int cnt = pstmt.executeUpdate();
+			cstmt.registerOutParameter(3, Types.NUMERIC);
+			cstmt.registerOutParameter(4, Types.NUMERIC);
+			cstmt.executeUpdate();
 
-			int cnt = cstmt.executeUpdate();
-			if (cnt >= 1) {
-//			if (rs.next()) {
-				System.out.println("반납 연기 성공");
-			} else {
+			if (cstmt.getInt(3) == 0) {
+				System.out.println("해당 도서가 없습니다");
+			} else if (cstmt.getInt(4) == 0) {
 				System.out.println("대출 예약이 있거나 입력오류");
+			} else {
+				System.out.println("반납 연기 성공");
 			}
-
-//			int cnt = pstmt.executeUpdate();
-//			if (cnt >= 1) {
-//				System.out.println("대출예약 성공");
-//			} else {
-//				System.out.println("대출예약 실패");
-//			}
 
 		} catch (SQLException e) {
 			System.out.println(e);
@@ -323,15 +282,10 @@ public class LibraryDAO {
 			System.out.println();
 		} finally {
 			try {
-//				if (pstmt != null)
-//					pstmt.close();
 				if (cstmt != null)
 					cstmt.close();
 				if (con != null)
 					con.close();
-//				if (rs != null) {
-//					rs.close();
-//				}
 			} catch (SQLException e) {
 				System.out.println(e);
 			}

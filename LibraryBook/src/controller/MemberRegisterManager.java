@@ -203,26 +203,6 @@ public class MemberRegisterManager {
 	// 회원 정보 보기
 	public void memberInfo(MemberVO memVO) {
 		MemberDAO memDAO = new MemberDAO();
-//		MemberVO memVO = null;
-
-//		String memId = null; // 아이디
-//		String memPw = null; // 입력 비밀번호
-//		boolean success = false;
-//
-//		System.out.println("로그인");
-//		do {
-//			System.out.print("아이디>>");
-//			memId = scan.nextLine();
-//			System.out.print("비밀번호>>");
-//			memPw = scan.nextLine();
-//
-//			if ((memVO = memDAO.getMemberLogin(memId, memPw)) != null) {
-//				success = true;
-//			} else {
-//				System.out.println("아이디 또는 비밀번호가 틀림 다시 입력");
-//			}
-//
-//		} while (!success);
 
 		memDAO.getMemberInfo(memVO.getMemId(), memVO.getMemPw(), false);
 	}

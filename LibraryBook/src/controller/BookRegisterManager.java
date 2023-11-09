@@ -6,7 +6,7 @@ import model.LibraryVO;
 
 public class BookRegisterManager {
 	public static Scanner scan = new Scanner(System.in);
-	
+
 	public void memberTotalList() {
 		MemberDAO memDAO = new MemberDAO();
 		String pw = null;
@@ -188,7 +188,6 @@ public class BookRegisterManager {
 			callNum = scan.nextLine();
 			System.out.print("도서위치 : ");
 			bookLocation = scan.nextLine();
-//			lbVO.setBookLocation(scan.nextLine());
 
 			lbVO = new LibraryVO();
 			lbVO.setIsbn(isbn);
@@ -197,11 +196,6 @@ public class BookRegisterManager {
 			lbVO.setBookLocation(bookLocation);
 		}
 		bkDAO.collectionAdd(lbVO);
-
-//		lbVO.setSerial(lbVO.getIsbn() + bkDAO.getBookCount(lbVO));
-
-//		lbVO.setCallNum(scan.nextLine());
-
 		System.out.println();
 
 	}
